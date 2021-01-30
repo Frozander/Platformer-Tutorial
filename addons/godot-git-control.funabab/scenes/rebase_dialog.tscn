@@ -1,0 +1,82 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+resource_name = "rebase_dialog"
+script/source = "tool
+extends \"res://addons/godot-git-control.funabab/scripts/git_dialog.gd\"
+
+var branch_btn;
+var current_branch;
+func _on_ready():
+	branch_btn = $container/rebase_on_branch/branches;
+	current_branch = $container/current_branch/input;
+	pass
+
+func _tr():
+	window_title = Lang.trr(\"prop_window_title_rebase_branch\");
+	$container/current_branch/label.text = Lang.trr(\"prop_label_text_current_branch\");
+	$container/rebase_on_branch/label.text = Lang.trr(\"prop_label_text_rebase_branch\");
+	pass
+
+func _get_ok_btn_text():
+	return Lang.trr(\"prop_btn_text_rebase_branch\");
+	pass
+
+func _get_result(custom):
+	return branch_btn.get_selected_id();
+	pass
+
+func _on_action_event(what, args):
+	if what == manager.git.action.UI_BRANCH_UPDATE:
+		var branches = args;
+
+		branch_btn.clear();
+		current_branch.text = branches[0];
+		for i in range(args.size()):
+			if i > 0:
+				branch_btn.add_item(branches[i], i);
+	pass"
+
+[node name="rebase_dialog" type="AcceptDialog"]
+margin_right = 472.0
+margin_bottom = 175.0
+script = SubResource( 1 )
+
+[node name="container" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -36.0
+
+[node name="current_branch" type="VBoxContainer" parent="container"]
+editor/display_folded = true
+margin_right = 456.0
+margin_bottom = 42.0
+
+[node name="label" type="Label" parent="container/current_branch"]
+margin_right = 456.0
+margin_bottom = 14.0
+text = "Current Branch"
+
+[node name="input" type="LineEdit" parent="container/current_branch"]
+margin_top = 18.0
+margin_right = 456.0
+margin_bottom = 42.0
+editable = false
+
+[node name="rebase_on_branch" type="VBoxContainer" parent="container"]
+margin_top = 46.0
+margin_right = 456.0
+margin_bottom = 84.0
+
+[node name="label" type="Label" parent="container/rebase_on_branch"]
+margin_right = 456.0
+margin_bottom = 14.0
+text = "Rebase on Branch"
+
+[node name="branches" type="OptionButton" parent="container/rebase_on_branch"]
+margin_top = 18.0
+margin_right = 456.0
+margin_bottom = 38.0

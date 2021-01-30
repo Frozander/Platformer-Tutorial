@@ -1,0 +1,97 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+resource_name = "merge_branch_dialog"
+script/source = "tool
+extends \"res://addons/godot-git-control.funabab/scripts/git_dialog.gd\"
+
+var branch_btn;
+var current_branch;
+func _on_ready():
+	branch_btn = $container/merge_branch/branches;
+	current_branch = $container/current_branch/input;
+	pass
+
+func _get_ok_btn_text():
+	return Lang.trr(\"prop_btn_text_merge_branch\");
+	pass
+
+func _tr():
+	window_title = Lang.trr(\"prop_window_title_merge_branch\");
+	$container/current_branch/label.text = Lang.trr(\"prop_label_text_current_branch\");
+	$container/merge_branch/label.text = Lang.trr(\"prop_label_text_merge_branch\");
+	$container/no_fast_forward/checkbox.text = Lang.trr(\"prop_checkbox_text_no_ff\");
+	pass
+
+func _get_result(custom):
+	return {
+		merge_branch_idx = branch_btn.get_selected_id(),
+		no_fast_forward = $container/no_fast_forward/checkbox.pressed
+	}
+	pass
+
+func _on_action_event(what, args):
+	if what == manager.git.action.UI_BRANCH_UPDATE:
+		var branches = args;
+
+		branch_btn.clear();
+		current_branch.text = branches[0];
+		for i in range(args.size()):
+			if i > 0:
+				branch_btn.add_item(branches[i], i);
+	pass
+
+"
+
+[node name="merge_branch_dialog" type="AcceptDialog"]
+margin_right = 452.0
+margin_bottom = 187.0
+script = SubResource( 1 )
+
+[node name="container" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -36.0
+
+[node name="current_branch" type="VBoxContainer" parent="container"]
+margin_right = 436.0
+margin_bottom = 42.0
+
+[node name="label" type="Label" parent="container/current_branch"]
+margin_right = 436.0
+margin_bottom = 14.0
+text = "Current branch"
+
+[node name="input" type="LineEdit" parent="container/current_branch"]
+margin_top = 18.0
+margin_right = 436.0
+margin_bottom = 42.0
+editable = false
+
+[node name="merge_branch" type="VBoxContainer" parent="container"]
+margin_top = 46.0
+margin_right = 436.0
+margin_bottom = 84.0
+
+[node name="label" type="Label" parent="container/merge_branch"]
+margin_right = 436.0
+margin_bottom = 14.0
+text = "Merge from Branch"
+
+[node name="branches" type="OptionButton" parent="container/merge_branch"]
+margin_top = 18.0
+margin_right = 436.0
+margin_bottom = 38.0
+
+[node name="no_fast_forward" type="VBoxContainer" parent="container"]
+margin_top = 88.0
+margin_right = 436.0
+margin_bottom = 112.0
+
+[node name="checkbox" type="CheckBox" parent="container/no_fast_forward"]
+margin_right = 436.0
+margin_bottom = 24.0
+text = "No Fast-Forward"
