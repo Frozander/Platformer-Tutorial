@@ -7,7 +7,7 @@
 [node name="StageOne" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 177.819, 91.1785 )
+position = Vector2( 176.483, 74.2514 )
 z_index = 1
 
 [node name="NonCollidingTiles" type="TileMap" parent="."]
