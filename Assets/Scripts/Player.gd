@@ -5,7 +5,7 @@ const G = 10
 const V = 60
 const J = -250
 
-const FIREBALL = preload("res://Fireball.tscn")
+const FIREBALL = preload("res://Assets/Prefabs/Fireball.tscn")
 
 var motion = Vector2()
 

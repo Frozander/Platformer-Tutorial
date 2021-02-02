@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Prefabs/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Tiles/s1_tilemap.tres" type="TileSet" id=2]
 
 [node name="StageOne" type="Node2D"]
