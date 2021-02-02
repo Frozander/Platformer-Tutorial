@@ -16,7 +16,9 @@ func _physics_process(delta):
 func _on_VisibilityNotifier2D_viewport_exited(_viewport):
 	queue_free()
 	
-func _on_Fireball_body_entered(_body):
+func _on_Fireball_body_entered(body):
+	if "Enemy" in body.name:
+		body.die()
 	queue_free()
 
 func set_fireball_dir(dir):
