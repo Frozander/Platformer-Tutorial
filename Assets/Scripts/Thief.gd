@@ -2,11 +2,17 @@ extends KinematicBody2D
 
 const UP = Vector2(0, -1)
 const G = 10
-const V = 30
+export(int) var hitpoints = 2
+export(int) var V = 30
+export(int) var damage = 1
+export(Vector2) var size = Vector2(1, 1)
 
 var motion = Vector2()
 var direction = 1
 var is_dead = false
+
+func _ready():
+	scale = size
 
 func _physics_process(_delta):
 	if !is_dead:
@@ -20,7 +26,10 @@ func _physics_process(_delta):
 		if get_slide_count() > 0:
 			for i in range(get_slide_count()):
 				if "Player" in get_slide_collision(i).collider.name:
-					get_slide_collision(i).collider.die()
+					get_slide_collision(i).collider.hit(damage)
+		
+		if hitpoints < 1:
+			die()
 
 func change_dir():
 	direction = direction * -1
@@ -33,7 +42,11 @@ func die():
 	$VanishTimer.start()
 	$CollisionShape2D.set_deferred("disabled", true)
 	$Sprite.play("dead")
+	if scale > Vector2(1, 1):
+		get_parent().get_node("ScreenShake").screen_shake(1, 10, 100)
 
+func hit(dmg):
+	hitpoints -= dmg
 
 func _on_VanishTimer_timeout():
 	queue_free()

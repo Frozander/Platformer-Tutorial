@@ -18,7 +18,7 @@ func _on_VisibilityNotifier2D_viewport_exited(_viewport):
 	
 func _on_Fireball_body_entered(body):
 	if "Enemy" in body.name:
-		body.die()
+		body.hit(1)
 	queue_free()
 
 func set_fireball_dir(dir):

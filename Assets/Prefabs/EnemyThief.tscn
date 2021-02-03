@@ -8,6 +8,7 @@ extents = Vector2( 8, 11 )
 
 [node name="EnemyThief" type="KinematicBody2D"]
 script = ExtResource( 2 )
+hitpoints = 1
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
 frames = ExtResource( 1 )

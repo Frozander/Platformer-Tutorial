@@ -5,6 +5,8 @@ const G = 10
 const V = 60
 const J = -250
 
+export(int) var hitpoints = 1
+
 const FIREBALL = preload("res://Assets/Prefabs/Fireball.tscn")
 
 var is_attacking = false
@@ -66,13 +68,21 @@ func _physics_process(_delta):
 			fireball_instance.set_fireball_dir(sign($FireballLocation.position.x))
 			get_parent().add_child(fireball_instance)
 		
-		motion = move_and_slide(motion, UP)
-		
 		if get_slide_count() > 0:
 			for i in range(get_slide_count()):
-				if "Enemy" in get_slide_collision(i).collider.name:
-					die()
-	
+				var collider = get_slide_collision(i).collider
+				if "Enemy" in collider.name:
+					motion.x += (position.x - collider.position.x) * 50
+					hit(collider.damage)
+		
+		if hitpoints < 1:
+			die()
+		
+		motion = move_and_slide(motion, UP)
+
+func hit(damage):
+	hitpoints -= damage
+
 func die():
 	is_dead = true
 	motion = Vector2(0, 0)

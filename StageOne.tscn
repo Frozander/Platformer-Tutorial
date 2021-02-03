@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Assets/Prefabs/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Tiles/s1_tilemap.tres" type="TileSet" id=2]
 [ext_resource path="res://Assets/Prefabs/EnemyThief.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/Sprites/ParallaxBG.png" type="Texture" id=4]
+[ext_resource path="res://Assets/Scripts/ScreenShake.gd" type="Script" id=5]
 
 [node name="StageOne" type="Node2D"]
 
@@ -30,9 +31,14 @@ position = Vector2( 82, 57 )
 
 [node name="EnemyThief2" parent="." instance=ExtResource( 3 )]
 position = Vector2( 235, 50 )
+V = 15
 
 [node name="EnemyThief3" parent="." instance=ExtResource( 3 )]
 position = Vector2( 232, 108 )
+
+[node name="EnemyThief4" parent="." instance=ExtResource( 3 )]
+position = Vector2( 750, 100 )
+size = Vector2( 2, 2 )
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 scroll_base_scale = Vector2( 0.5, 1 )
@@ -40,8 +46,20 @@ scroll_ignore_camera_zoom = true
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_mirroring = Vector2( 320, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
 texture = ExtResource( 4 )
 centered = false
 offset = Vector2( 0, -180 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ScreenShake" type="Node2D" parent="."]
+script = ExtResource( 5 )
+
+[node name="Tween" type="Tween" parent="ScreenShake"]
+[connection signal="tween_completed" from="ScreenShake/Tween" to="ScreenShake" method="_on_Tween_tween_completed"]
