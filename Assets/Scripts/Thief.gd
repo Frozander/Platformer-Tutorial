@@ -17,6 +17,10 @@ func _physics_process(_delta):
 		motion.y += G
 		$Sprite.play("walk")
 		motion = move_and_slide(motion, UP)
+		if get_slide_count() > 0:
+			for i in range(get_slide_count()):
+				if "Player" in get_slide_collision(i).collider.name:
+					get_slide_collision(i).collider.die()
 
 func change_dir():
 	direction = direction * -1
