@@ -90,10 +90,16 @@ func die():
 	$PlayerCollider.set_deferred("disabled", false)
 	$Timer.start()
 
+func return_to_title():
+	var load_err = get_tree().change_scene("res://TitleScreen.tscn")
+	if load_err:
+		get_tree().quit()
+
 func _on_Sprite_animation_finished():
 	is_attacking = false
 
 func _on_Timer_timeout():
-	var load_err = get_tree().change_scene("res://TitleScreen.tscn")
-	if load_err:
-		get_tree().quit()
+	return_to_title()
+
+func _on_VisibilityNotifier2D_viewport_exited(_viewport):
+	return_to_title()

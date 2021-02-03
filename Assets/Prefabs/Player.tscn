@@ -13,7 +13,7 @@ script = ExtResource( 2 )
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
 frames = ExtResource( 1 )
-animation = "dead"
+animation = "idle"
 playing = true
 
 [node name="PlayerCollider" type="CollisionShape2D" parent="."]
@@ -36,5 +36,8 @@ editor_draw_limits = true
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
 [connection signal="animation_finished" from="Sprite" to="." method="_on_Sprite_animation_finished"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="viewport_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_viewport_exited"]

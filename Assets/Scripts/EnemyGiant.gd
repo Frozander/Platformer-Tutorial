@@ -1,31 +1,59 @@
 extends KinematicBody2D
 
 const UP = Vector2(0, -1)
-const G = 20
-const V = 100
-const J = -300
+const G = 10
+export(int) var hitpoints = 2
+export(int) var V = 30
+export(int) var damage = 1
+export(Vector2) var size = Vector2(1, 1)
+export(float) var vanish_time = 2
 
 var motion = Vector2()
+var direction = 1
+var is_dead = false
+var can_vanish = true
+
+func _ready():
+	if vanish_time > 0:
+		$VanishTimer.wait_time = vanish_time
+	else:
+		can_vanish = false
+	scale = size
 
 func _physics_process(_delta):
-	motion.y += G
-	
-#	if Input.is_action_pressed("ui_right"):
-#		motion.x = V
-#		$Sprite.flip_h = false
-#		$Sprite.play("run")
-#	elif Input.is_action_pressed("ui_left"):
-#		motion.x = -V
-#		$Sprite.flip_h = true
-#		$Sprite.play("run")
-#	else:
-#		motion.x = 0
-#		$Sprite.play("idle")
-#
-#	if is_on_floor():
-#		if Input.is_action_just_pressed("ui_up"):
-#			motion.y += J
-#	else:
-#		$Sprite.play("jump")
-	
-	motion = move_and_slide(motion, UP)
+	if !is_dead:
+		if is_on_wall() || !$LedgeDetector.is_colliding():
+			change_dir()
+		
+		motion.x = V * direction
+		motion.y += G
+		$Sprite.play("walk")
+		motion = move_and_slide(motion, UP)
+		if get_slide_count() > 0:
+			for i in range(get_slide_count()):
+				if "Player" in get_slide_collision(i).collider.name:
+					get_slide_collision(i).collider.hit(damage)
+		
+		if hitpoints < 1:
+			die()
+
+func change_dir():
+	direction = direction * -1
+	$Sprite.flip_h = !$Sprite.flip_h
+	$LedgeDetector.position.x *= -1
+
+func die():
+	is_dead = true
+	motion = Vector2(0, 0)
+	if can_vanish:
+		$VanishTimer.start()
+	$CollisionShape2D.set_deferred("disabled", true)
+	$Sprite.play("dead")
+	if scale > Vector2(1, 1):
+		get_parent().get_node("ScreenShake").screen_shake(1, 10, 100)
+
+func hit(dmg):
+	hitpoints -= dmg
+
+func _on_VanishTimer_timeout():
+	queue_free()

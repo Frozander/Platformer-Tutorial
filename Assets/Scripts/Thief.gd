@@ -6,12 +6,18 @@ export(int) var hitpoints = 2
 export(int) var V = 30
 export(int) var damage = 1
 export(Vector2) var size = Vector2(1, 1)
+export(float) var vanish_time = 2
 
 var motion = Vector2()
 var direction = 1
 var is_dead = false
+var can_vanish = true
 
 func _ready():
+	if vanish_time > 0:
+		$VanishTimer.wait_time = vanish_time
+	else:
+		can_vanish = false
 	scale = size
 
 func _physics_process(_delta):
@@ -39,7 +45,8 @@ func change_dir():
 func die():
 	is_dead = true
 	motion = Vector2(0, 0)
-	$VanishTimer.start()
+	if can_vanish:
+		$VanishTimer.start()
 	$CollisionShape2D.set_deferred("disabled", true)
 	$Sprite.play("dead")
 	if scale > Vector2(1, 1):

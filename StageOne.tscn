@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Assets/Prefabs/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Tiles/s1_tilemap.tres" type="TileSet" id=2]
 [ext_resource path="res://Assets/Prefabs/EnemyThief.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/Sprites/ParallaxBG.png" type="Texture" id=4]
 [ext_resource path="res://Assets/Scripts/ScreenShake.gd" type="Script" id=5]
+[ext_resource path="res://Assets/Prefabs/EnemyGiant.tscn" type="PackedScene" id=6]
 
 [node name="StageOne" type="Node2D"]
 
@@ -35,10 +36,15 @@ V = 15
 
 [node name="EnemyThief3" parent="." instance=ExtResource( 3 )]
 position = Vector2( 232, 108 )
+vanish_time = 0.001
 
-[node name="EnemyThief4" parent="." instance=ExtResource( 3 )]
-position = Vector2( 750, 100 )
+[node name="EnemyGiant" parent="." instance=ExtResource( 6 )]
+position = Vector2( 720, 85 )
+hitpoints = 5
+V = 20
+damage = 2
 size = Vector2( 2, 2 )
+vanish_time = -1.0
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 scroll_base_scale = Vector2( 0.5, 1 )
@@ -60,6 +66,9 @@ __meta__ = {
 
 [node name="ScreenShake" type="Node2D" parent="."]
 script = ExtResource( 5 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Tween" type="Tween" parent="ScreenShake"]
 [connection signal="tween_completed" from="ScreenShake/Tween" to="ScreenShake" method="_on_Tween_tween_completed"]

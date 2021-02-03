@@ -15,5 +15,5 @@ func screen_shake(shake_len, shake_power, shake_priority):
 		$Tween.start()
 
 
-func _on_Tween_tween_completed(object, key):
+func _on_Tween_tween_completed(_object, _key):
 	current_shake_priority = 0
