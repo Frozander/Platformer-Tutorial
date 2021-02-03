@@ -11,6 +11,13 @@ var is_attacking = false
 var is_on_ground = true
 var motion = Vector2()
 
+func _ready():
+	var root = get_tree().get_root()
+	var tilemap = root.get_child(root.get_child_count() - 1).get_node("TileMap")
+	var cell_size = tilemap.cell_size.x
+	$Camera2D.limit_left = tilemap.get_used_rect().position.x * cell_size
+	$Camera2D.limit_right = tilemap.get_used_rect().end.x * cell_size
+
 func _physics_process(_delta):
 	is_on_ground = is_on_floor()
 	motion.y += G
